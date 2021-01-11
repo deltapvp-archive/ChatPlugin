@@ -5,11 +5,14 @@ authors: [ powercas_gamer ]
 depend: [PlaceholderAPI]
 commands:
   chatplugin:
-    usage: /<command> reload
-    permission: chatplugin.reload
+    usage: /<command>
+    permission: chatplugin.use
     description: reload the plugin
 
 permissions:
   chatplugin.color:
     default: op
     description: allows you to use chatcolors and RGB in chat.
+  chatplugin.use:
+    default: op
+    description: permission to use the thing

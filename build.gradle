@@ -39,12 +39,16 @@ repositories {
     maven {
         url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
     }
+    maven {
+        url = 'https://repo.codemc.org/repository/maven-public'
+    }
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
     compile "net.kyori:adventure-api:4.3.0"
     compile "net.kyori:adventure-platform-bukkit:4.0.0-SNAPSHOT"
+    compile "org.bstats:bstats-bukkit:1.8"
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }
 
@@ -57,6 +61,8 @@ processResources {
 shadowJar {
     archiveName = "ChatPlugin.jar"
     relocate 'net.kyori', 'net.deltapvp.chatplugin.lib.kyori'
+    relocate 'org.bstats', 'net.deltapvp.chatplugin.lib.bstats'
+    minimize()
 }
 
 artifacts {

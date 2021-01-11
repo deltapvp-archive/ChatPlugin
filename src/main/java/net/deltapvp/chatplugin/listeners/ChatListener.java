@@ -5,6 +5,7 @@ import net.deltapvp.chatplugin.utils.PlaceholderUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,15 +21,19 @@ public class ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent event) {
+        if (event.isCancelled()) return;
         Player player = event.getPlayer();
         String message = event.getMessage();
+        Component formattedMessage = getFormat(player, message);
 
-        event.setCancelled(true);
         for (Player plr : event.getRecipients()) {
-            ChatPlugin.getInstance().adventure().player(plr).sendMessage(getFormat(player, message));
+            ChatPlugin.getInstance().adventure().player(plr).sendMessage(formattedMessage);
         }
-
-        ChatPlugin.getInstance().adventure().console().sendMessage(getFormat(player, message));
+        event.getRecipients().clear();
+      //  event.setFormat(LegacyComponentSerializer.legacyAmpersand().serialize(formattedMessage));
+        event.setFormat(LegacyComponentSerializer.legacyAmpersand().serialize(formattedMessage)
+                .replaceAll("(?:[^%]|\\A)%(?:[^%]|\\z)", "%%"));
+        //ChatPlugin.getInstance().adventure().console().sendMessage(formattedMessage);
     }
 
     public Component getFormat(Player player, String message) {

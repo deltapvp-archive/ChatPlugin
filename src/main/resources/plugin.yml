@@ -1,0 +1,15 @@
+name: ChatPlugin
+version: @version@
+main: net.deltapvp.chatplugin.ChatPlugin
+authors: [ powercas_gamer ]
+depend: [PlaceholderAPI]
+commands:
+  chatplugin:
+    usage: /<command> reload
+    permission: chatplugin.reload
+    description: reload the plugin
+
+permissions:
+  chatplugin.color:
+    default: op
+    description: allows you to use chatcolors and RGB in chat.

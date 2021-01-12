@@ -19,6 +19,25 @@ apply plugin: 'com.github.johnrengelman.shadow'
 group = 'net.deltapvp'
 version = '1.0-SNAPSHOT'
 
+def determinePatchVersion = {
+        // get the name of the last tag
+        def tagInfo = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'describe', '--tags'
+            standardOutput = tagInfo
+        }
+        tagInfo = tagInfo.toString()
+
+        if (!tagInfo.contains('-')) {
+            return 0
+        }
+        return tagInfo.split("-")[1]
+    }
+
+def majorVersion = '1'
+def minorVersion = '0'
+def fullVersion = majorVersion + '.' + minorVersion + '.' + determinePatchVersion()
+
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
@@ -48,18 +67,19 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
     compile "net.kyori:adventure-api:4.3.0"
     compile "net.kyori:adventure-platform-bukkit:4.0.0-SNAPSHOT"
+    compile "net.kyori:adventure-text-minimessage:4.0.0-SNAPSHOT"
     compile "org.bstats:bstats-bukkit:1.8"
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }
 
 processResources {
     from(sourceSets.main.resources.srcDirs) {
-        filter ReplaceTokens, tokens: [version: version]
+        filter ReplaceTokens, tokens: [version: fullVersion]
     }
 }
 
 shadowJar {
-    archiveName = "ChatPlugin.jar"
+    archiveName = "ChatPlugin-" + fullVersion + ".jar"
     relocate 'net.kyori', 'net.deltapvp.chatplugin.lib.kyori'
     relocate 'org.bstats', 'net.deltapvp.chatplugin.lib.bstats'
     minimize()

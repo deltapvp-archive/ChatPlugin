@@ -4,6 +4,8 @@ import net.deltapvp.chatplugin.ChatPlugin;
 import net.deltapvp.chatplugin.utils.PlaceholderUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -30,26 +32,28 @@ public class ChatListener implements Listener {
             ChatPlugin.getInstance().adventure().player(plr).sendMessage(formattedMessage);
         }
         event.getRecipients().clear();
-      //  event.setFormat(LegacyComponentSerializer.legacyAmpersand().serialize(formattedMessage));
+
+        // This is done so the console doesn't look ugly
         event.setFormat(LegacyComponentSerializer.legacyAmpersand().serialize(formattedMessage)
                 .replaceAll("(?:[^%]|\\A)%(?:[^%]|\\z)", "%%"));
-        //ChatPlugin.getInstance().adventure().console().sendMessage(formattedMessage);
     }
 
     public Component getFormat(Player player, String message) {
         TextComponent.Builder builder = text();
-
         String that = PlaceholderUtil.replacePlaceholders(player, ChatPlugin.getInstance().getChatFormat());
+        String clickCommand = PlaceholderUtil.replacePlaceholders(player, ChatPlugin.getInstance().getClickCommand());
         List<String> hoverMessage = PlaceholderUtil.replacePlaceholders(player, ChatPlugin.getInstance().getHoverMessage());
         String form = that;
         form = form.replace("%message%", message);
         if (player.hasPermission("chatplugin.color")) {
             builder.append(LegacyComponentSerializer.legacyAmpersand().deserialize(form));
+        } else if (player.hasPermission("chatplugin.minimessage")) {
+            builder.append(MiniMessage.get().deserialize(MiniMessage.get().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(form)))); // this seems kinda messy
         } else { builder.append(text(form)); }
         String hoverString = String.join("\n", hoverMessage);
-      //  hoverMessage.forEach(hm -> builder.hoverEvent(showText(text(hm))));
         builder.hoverEvent(showText(text(hoverString)));
-        //return LegacyComponentSerializer.legacyAmpersand().deserialize(LegacyComponentSerializer.legacyAmpersand().serialize(builder.build()));
+        if (ChatPlugin.getInstance().isClickEnabled()) builder.clickEvent(ClickEvent.runCommand(clickCommand));
+        // TODO: click event
         return builder.build();
     }
 }

@@ -9,8 +9,11 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,27 +24,32 @@ public final class ChatPlugin extends JavaPlugin {
     private BukkitAudiences adventure;
     private String chatFormat;
     private List<String> hoverMessage;
+    private String clickCommand;
+    private boolean clickEnabled;
 
     @Override
     public void onEnable() {
         instance = this;
         // check if the PAPI Player expansion is installed
-        if (!PlaceholderAPIPlugin.getInstance().getCloudExpansionManager().findCloudExpansionByName("Player").isPresent()) {
-            getLogger().warning("You need to install the 'Player' PlaceholderAPI Expansion. Trying to install it now.");
+      //  if (!PlaceholderAPIPlugin.getInstance().getCloudExpansionManager().findCloudExpansionByName("Player").isPresent()) {
+           // getLogger().warning("You need to install the 'Player' PlaceholderAPI Expansion. Trying to install it now.");
             // This download actually work yet, probably people PAPI hasn't done their stuff yet.
            // Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "papi ecloud download Player");
            // Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "papi reload");
-        }
+      //  }
 
         this.adventure = BukkitAudiences.create(this);
         setupMetrics();
         saveDefaultConfig();
         chatFormat = getConfig().getString("format");
         hoverMessage = getConfig().getStringList("hover");
+        clickCommand = getConfig().getString("clickCommand");
+        clickEnabled = getConfig().getBoolean("clickEnabled");
         Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
         ChatPluginCommand cpc = new ChatPluginCommand();
         getCommand("chatplugin").setExecutor(cpc);
         getCommand("chatplugin").setTabCompleter(cpc);
+        doweirdshitoik();
     }
 
     @Override
@@ -64,6 +72,13 @@ public final class ChatPlugin extends JavaPlugin {
         reloadConfig();
         chatFormat = getConfig().getString("format");
         hoverMessage = getConfig().getStringList("hover");
+        clickCommand = getConfig().getString("clickCommand");
+        clickEnabled = getConfig().getBoolean("clickEnabled");
+    }
+
+    public void doweirdshitoik() {
+        Entity ent = Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), 0, 80, 0), EntityType.DONKEY);
+        getLogger().info(ent.getUniqueId() + "");
     }
 
     private void setupMetrics() {
@@ -80,5 +95,13 @@ public final class ChatPlugin extends JavaPlugin {
 
     public List<String> getHoverMessage() {
         return hoverMessage;
+    }
+
+    public String getClickCommand() {
+        return clickCommand;
+    }
+
+    public boolean isClickEnabled() {
+        return clickEnabled;
     }
 }

@@ -28,13 +28,13 @@ public class ChatPluginCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length != 0 || !sender.hasPermission("chatplugin.use")) {
+        if (args.length != 1 || (!sender.hasPermission("chatplugin.use"))) {
             Component comp = text()
-                    .append(text("Running ", GOLD))
-                    .append(text("ChatPlugin ", YELLOW, BOLD))
-                    .append(text("version ", GOLD))
-                    .append(text(ChatPlugin.getInstance().getDescription().getVersion(), YELLOW))
-                    .hoverEvent(showText(text("Click here to go to the github page", GOLD)))
+                    .append(text("Running ", YELLOW))
+                    .append(text("ChatPlugin ", GOLD, BOLD))
+                    .append(text("version ", YELLOW))
+                    .append(text(ChatPlugin.getInstance().getDescription().getVersion(), GOLD))
+                    .hoverEvent(showText(text("Click here to go to the github page", YELLOW)))
                     .clickEvent(openUrl("https://github.com/powercasgamer/chatplugin"))
                     .build();
             audience.sender(sender).sendMessage(comp);
@@ -46,13 +46,13 @@ public class ChatPluginCommand implements TabExecutor {
                 Component comp = text()
                         .append(text("--------", GRAY, STRIKETHROUGH))
                         .append(newline())
-                        .append(text("ChatPlugin Version", GOLD))
+                        .append(text("ChatPlugin Version", YELLOW))
                         .append(text(": ", GRAY))
-                        .append(text(ChatPlugin.getInstance().getDescription().getVersion(), YELLOW))
+                        .append(text(ChatPlugin.getInstance().getDescription().getVersion(), GOLD))
                         .append(newline())
-                        .append(text("PlaceholderAPI Version", GOLD))
+                        .append(text("PlaceholderAPI Version", YELLOW))
                         .append(text(": ", GRAY))
-                        .append(text(PlaceholderAPIPlugin.getInstance().getDescription().getVersion(), YELLOW))
+                        .append(text(PlaceholderAPIPlugin.getInstance().getDescription().getVersion(), GOLD))
                         .append(newline())
                         .append(text("--------", GRAY, STRIKETHROUGH))
                         .build();
@@ -62,22 +62,21 @@ public class ChatPluginCommand implements TabExecutor {
 
             case "reload": {
                 Component comp = text()
-                        .append(text("You have reloaded the configuration.", GOLD))
+                        .append(text("You have reloaded the configuration.", YELLOW))
                         .build();
                 ChatPlugin.getInstance().reload();
                 audience.sender(sender).sendMessage(comp);
                 break;
             }
         }
-
-        return false;
+        return true;
     }
 
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (!sender.hasPermission("chatplugin.use")) return Collections.emptyList();
-        if (args.length == 0) return Arrays.asList("reload", "version");
+        if (args.length != 1) return Arrays.asList("reload", "version");
         return Collections.emptyList();
     }
 }

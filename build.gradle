@@ -70,6 +70,8 @@ dependencies {
     compile "net.kyori:adventure-text-minimessage:4.0.0-SNAPSHOT"
     compile "org.bstats:bstats-bukkit:1.8"
     compileOnly 'me.clip:placeholderapi:2.10.9'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.google.guava:guava:19.0'
 }
 
 processResources {
@@ -82,6 +84,7 @@ shadowJar {
     archiveName = "ChatPlugin-" + fullVersion + ".jar"
     relocate 'net.kyori', 'net.deltapvp.chatplugin.lib.kyori'
     relocate 'org.bstats', 'net.deltapvp.chatplugin.lib.bstats'
+    relocate 'com.google', 'net.deltapvp.chatplugin.lib.google'
     minimize()
 }
 

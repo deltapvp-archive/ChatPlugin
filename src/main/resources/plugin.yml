@@ -6,7 +6,6 @@ depend: [PlaceholderAPI]
 commands:
   chatplugin:
     usage: /<command>
-    permission: chatplugin.use
     description: reload the plugin
 
 permissions:

@@ -2,3 +2,5 @@ format: "%player_displayname%&7: &f%message%"
 hover:
   - "Name: %player_name%"
   - "UUID: %player_uuid%"
+clickEnabled: true
+clickCommand: "/msg %player_name% Hello!" # This requires a '/' else it'll type the message in public chat.

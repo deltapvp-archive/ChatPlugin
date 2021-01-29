@@ -46,6 +46,9 @@ repositories {
     maven {
         url 'https://repo.deltapvp.net' 
     }
+    maven {
+	url 'https://repo.codemc.org/repository/maven-public'
+    }
 }
 
 dependencies {

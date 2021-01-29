@@ -49,7 +49,6 @@ public final class ChatPlugin extends JavaPlugin {
         ChatPluginCommand cpc = new ChatPluginCommand();
         getCommand("chatplugin").setExecutor(cpc);
         getCommand("chatplugin").setTabCompleter(cpc);
-        doweirdshitoik();
     }
 
     @Override
@@ -74,11 +73,6 @@ public final class ChatPlugin extends JavaPlugin {
         hoverMessage = getConfig().getStringList("hover");
         clickCommand = getConfig().getString("clickCommand");
         clickEnabled = getConfig().getBoolean("clickEnabled");
-    }
-
-    public void doweirdshitoik() {
-        Entity ent = Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), 0, 80, 0), EntityType.DONKEY);
-        getLogger().info(ent.getUniqueId() + "");
     }
 
     private void setupMetrics() {

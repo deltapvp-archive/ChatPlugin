@@ -13,6 +13,8 @@ buildscript {
 
 plugins {
     id 'java'
+    id "org.sonarqube" version "3.1.1"
+
 }
 apply plugin: 'com.github.johnrengelman.shadow'
 
@@ -78,4 +80,11 @@ shadowJar {
 
 artifacts {
     archives shadowJar
+}
+sonarqube {
+  properties {
+    property "sonar.projectKey", "powercasgamer_ChatPlugin"
+    property "sonar.organization", "powercasgamer"
+    property "sonar.host.url", "https://sonarcloud.io"
+  }
 }
